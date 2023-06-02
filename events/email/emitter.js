@@ -3,8 +3,9 @@ const EventEmitter = require('events');
 const emailEvent = new EventEmitter();
 
 const { sendEmail } = require('../../postmark/notemplate');
+const { sendEmailWithTemplate } = require('../../postmark/template');
 
-// check if email exists
+
 emailEvent.on('send', async (requestData, callback) => {
     requestData.status = true
     let { recipient, subject, message } = requestData
@@ -12,9 +13,11 @@ emailEvent.on('send', async (requestData, callback) => {
     callback(response);
 });
 
-// check if account is verified
-emailEvent.on('sendWithTemplate', (requestData, callback) => {
-    callback(requestData);
+emailEvent.on('sendWithTemplate', async (requestData, callback) => {
+    let { recipient, templateId, model } = requestData
+	console.log(requestData)
+    const response = await sendEmailWithTemplate(recipient, templateId, model);
+    callback(response);
 });
 
 module.exports = {

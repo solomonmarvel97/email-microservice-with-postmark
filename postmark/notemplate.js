@@ -6,7 +6,7 @@ const client = new postmark.ServerClient(process.env.POSTMARK_KEY);
 exports.sendEmail = async (to, subject, body) => {
     try {
         const response = await client.sendEmail({
-            From: 'noreply@solomonmarvel.com',
+            From: process.env.EMAIL_FROM,
             To: to,
             Subject: subject,
             HtmlBody: body
